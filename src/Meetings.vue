@@ -1,4 +1,4 @@
-<template>
+<template >
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
@@ -37,13 +37,30 @@
       };
     },
     methods: {
+
+
       addNewParticipant(participant) {
         this.people.push(participant);
+        this.$http.post('participants', participant).then(response => {
+          this.people.push(participant);
+        })
       },
       removeParticipant(participant) {
         const index = this.people.indexOf(participant);
+        this.$http.delete('participants' + '/' + participant.id).then(response => {
+        const index = this.people.indexOf(participant);
+
         this.people.splice(index, 1);
-      }
-    }
+        })
+      },
+    },
+    mounted() {
+            this.$http.get('participants').then(response => {
+            this.people = response.body;
+            });
+  }
+
+
   };
+
 </script>
